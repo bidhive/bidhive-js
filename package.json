@@ -1,14 +1,19 @@
 {
-  "name": "bidhive",
-  "version": "0.0.1",
-  "description": "Public API integrations",
+  "name": "@bidhive/bidhive",
+  "version": "0.0.2",
+  "description": "Public API Library for Bidhive",
+  "author": "alec@bidhive.com",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "build": "tsc src/*"
+    "build": "npx tsc",
+    "publish": "yarn build && npm publish"
   },
   "devDependencies": {
     "typescript": "4.5.5"
   },
-  "packageManager": "yarn@3.1.1"
+  "packageManager": "yarn@3.1.1",
+  "keywords": [
+    "bidhive"
+  ]
 }

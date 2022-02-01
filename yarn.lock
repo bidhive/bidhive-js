@@ -5,9 +5,9 @@ __metadata:
   version: 5
   cacheKey: 8
 
-"bidhive@workspace:.":
+"@bidhive/bidhive@workspace:.":
   version: 0.0.0-use.local
-  resolution: "bidhive@workspace:."
+  resolution: "@bidhive/bidhive@workspace:."
   dependencies:
     typescript: 4.5.5
   languageName: unknown
