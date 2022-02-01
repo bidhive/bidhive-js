@@ -1,12 +1,13 @@
 {
   "name": "@bidhive/bidhive",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Public API Library for Bidhive",
   "author": "alec@bidhive.com",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "source": "src/index.ts",
   "license": "MIT",
   "scripts": {
-    "build": "npx tsc",
+    "build": "yarn run tsc",
     "publish": "yarn build && npm publish"
   },
   "devDependencies": {
