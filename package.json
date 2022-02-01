@@ -1,6 +1,6 @@
 {
   "name": "@bidhive/bidhive",
-  "version": "0.0.3",
+  "version": "0.0.3-1",
   "description": "Public API Library for Bidhive",
   "author": "alec@bidhive.com",
   "main": "dist/index.js",

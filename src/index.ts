@@ -2,12 +2,7 @@ export function getMessage() {
   return "hello!";
 }
 
-export interface User {
-  id: number;
-  email: string;
-}
-
-export function getTestUser(): User {
+export function getTestUser() {
   return {
     id: 1,
     email: "test@bidhive.com",
