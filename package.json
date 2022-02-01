@@ -4,6 +4,9 @@
   "description": "Public API integrations",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "build": "tsc src/*"
+  },
   "devDependencies": {
     "typescript": "4.5.5"
   },
