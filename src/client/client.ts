@@ -1,7 +1,3 @@
-const ENDPOINT: string = "http://localhost:3000";
-
-const message: "hi" | "hello" = "hi";
-
 class BidhiveClient {
   private accessToken = "";
 
@@ -36,6 +32,10 @@ class BidhiveClient {
     }
   }
 
+  public getAccessToken() {
+    return this.accessToken;
+  }
+
   public setAccessToken(token: string) {
     this.accessToken = token;
   }
@@ -45,4 +45,4 @@ class BidhiveClient {
   }
 }
 
-export const client = new BidhiveClient(ENDPOINT);
+export const client = new BidhiveClient("http://localhost:8000");
