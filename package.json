@@ -1,6 +1,6 @@
 {
   "name": "@bidhive/bidhive",
-  "version": "0.0.3-1",
+  "version": "0.0.3-2",
   "description": "Public API Library for Bidhive",
   "author": "alec@bidhive.com",
   "main": "dist/index.js",
@@ -8,7 +8,7 @@
   "source": "src/index.ts",
   "license": "MIT",
   "scripts": {
-    "build": "yarn run microbundle",
+    "build": "yarn run microbundle --no-compress --format cjs",
     "publish": "yarn build && npm publish"
   },
   "devDependencies": {

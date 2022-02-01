@@ -1,4 +1,6 @@
-const ENDPOINT = "http://localhost:3000";
+const ENDPOINT: string = "http://localhost:3000";
+
+const message: "hi" | "hello" = "hi";
 
 class BidhiveClient {
   private accessToken = "";
