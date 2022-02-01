@@ -8,3 +8,5 @@ export function getTestUser() {
     email: "test@bidhive.com",
   };
 }
+
+export { client } from "./client";
