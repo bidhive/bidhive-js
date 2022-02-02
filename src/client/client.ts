@@ -1,14 +1,36 @@
 type Method = "GET" | "POST";
 
+export interface Token {
+  token: string;
+}
+
 export type ClientCallback<Response> = (
   client: BidhiveClient,
   response: Response
 ) => void;
 
+const TOKEN_REFRESH = 30 * 60 * 1000;
+
 class BidhiveClient {
   private token = "";
 
+  private refreshTokenInterval: NodeJS.Timer | null = null;
+
   constructor(private endpoint: string) {}
+
+  public startTokenRefresh(refreshTokenFn: (payload: Token) => Promise<Token>) {
+    this.refreshTokenInterval = setInterval(async () => {
+      const newToken = await refreshTokenFn({ token: this.token });
+      this.token = newToken.token;
+    }, TOKEN_REFRESH);
+  }
+
+  public stopTokenRefresh() {
+    if (this.refreshTokenInterval) {
+      clearInterval(this.refreshTokenInterval);
+      this.refreshTokenInterval = null;
+    }
+  }
 
   private async request<Response extends {}, Request extends {}>(
     url: string,

@@ -1,2 +1,2 @@
-export { client } from "./client";
+export { client, Token } from "./client";
 export { createGet, createPost } from "./create";
