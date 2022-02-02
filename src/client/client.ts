@@ -1,7 +1,11 @@
 type Method = "GET" | "POST";
 
-export interface Token {
-  token: string;
+export interface OAuth2Token {
+  access_token: string;
+  expires_in: number;
+  token_type: "Bearer";
+  scope: string;
+  refresh_token: string;
 }
 
 export type ClientCallback<Response> = (
@@ -12,25 +16,27 @@ export type ClientCallback<Response> = (
 const TOKEN_REFRESH = 30 * 60 * 1000;
 
 class BidhiveClient {
-  private token = "";
+  private token: OAuth2Token | null = null;
+  private clientId: string = "";
+  private clientSecret: string = "";
 
   private refreshTokenInterval: NodeJS.Timer | null = null;
 
-  constructor(private endpoint: string) {}
+  constructor(private frontendUrl: string, private endpoint: string) {}
 
-  public startTokenRefresh(refreshTokenFn: (payload: Token) => Promise<Token>) {
-    this.refreshTokenInterval = setInterval(async () => {
-      const newToken = await refreshTokenFn({ token: this.token });
-      this.token = newToken.token;
-    }, TOKEN_REFRESH);
-  }
+  // public startTokenRefresh(refreshTokenFn: (payload: Token) => Promise<Token>) {
+  //   this.refreshTokenInterval = setInterval(async () => {
+  //     const newToken = await refreshTokenFn({ token: this.token });
+  //     this.token = newToken.token;
+  //   }, TOKEN_REFRESH);
+  // }
 
-  public stopTokenRefresh() {
-    if (this.refreshTokenInterval) {
-      clearInterval(this.refreshTokenInterval);
-      this.refreshTokenInterval = null;
-    }
-  }
+  // public stopTokenRefresh() {
+  //   if (this.refreshTokenInterval) {
+  //     clearInterval(this.refreshTokenInterval);
+  //     this.refreshTokenInterval = null;
+  //   }
+  // }
 
   private async request<Response extends {}, Request extends {}>(
     url: string,
@@ -48,7 +54,10 @@ class BidhiveClient {
     const headers = new Headers();
     headers.append("Content-Type", "application/json");
     if (this.token) {
-      headers.append("Authorization", `JWT ${this.token}`);
+      headers.append(
+        "Authorization",
+        `${this.token.token_type} ${this.token.access_token}`
+      );
     }
 
     const response = await fetch(finalUrl, {
@@ -71,12 +80,28 @@ class BidhiveClient {
     }
   }
 
+  public getFrontendUrl() {
+    return this.frontendUrl;
+  }
+
+  public getEndpoint() {
+    return this.endpoint;
+  }
+
   public getToken() {
     return this.token;
   }
 
-  public setToken(token: string) {
+  public setToken(token: OAuth2Token) {
     this.token = token;
+  }
+
+  public setClientId(clientId: string) {
+    this.clientId = clientId;
+  }
+
+  public setClientSecret(clientSecret: string) {
+    this.clientSecret = clientSecret;
   }
 
   public async get<Response extends {}>(
@@ -107,4 +132,7 @@ class BidhiveClient {
   }
 }
 
-export const client = new BidhiveClient("http://localhost:8000");
+export const client = new BidhiveClient(
+  "http://localhost:3000",
+  "http://localhost:8000"
+);

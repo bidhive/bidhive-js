@@ -67,5 +67,5 @@ export interface Bid {
 }
 
 export class BidAPI {
-  static bids = createGet<PaginatedResponse<Bid>>("/bid/");
+  static bids = createGet<PaginatedResponse<Bid>>("/public/bid/");
 }

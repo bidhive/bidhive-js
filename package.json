@@ -11,6 +11,9 @@
     "build": "yarn run microbundle --no-compress --format cjs",
     "publish": "yarn build && npm publish"
   },
+  "dependencies": {
+    "buffer": "6.0.3"
+  },
   "devDependencies": {
     "microbundle": "^0.14.2",
     "typescript": "4.5.2"
