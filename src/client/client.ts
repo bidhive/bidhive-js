@@ -24,30 +24,39 @@ class BidhiveClient {
 
   constructor(private frontendUrl: string, private endpoint: string) {}
 
-  // public startTokenRefresh(refreshTokenFn: (payload: Token) => Promise<Token>) {
-  //   this.refreshTokenInterval = setInterval(async () => {
-  //     const newToken = await refreshTokenFn({ token: this.token });
-  //     this.token = newToken.token;
-  //   }, TOKEN_REFRESH);
-  // }
+  public static init(options: { clientID: string; clientSecret: string }) {
+    client.setClientId(options.clientID);
+    client.setClientSecret(options.clientSecret);
+  }
 
-  // public stopTokenRefresh() {
-  //   if (this.refreshTokenInterval) {
-  //     clearInterval(this.refreshTokenInterval);
-  //     this.refreshTokenInterval = null;
-  //   }
-  // }
+  public startTokenRefresh(
+    refreshTokenFn: (payload: OAuth2Token) => Promise<OAuth2Token>
+  ) {
+    this.refreshTokenInterval = setInterval(async () => {
+      if (this.token) {
+        const newToken = await refreshTokenFn(this.token);
+        this.token = newToken;
+      }
+    }, TOKEN_REFRESH);
+  }
+
+  public stopTokenRefresh() {
+    if (this.refreshTokenInterval) {
+      clearInterval(this.refreshTokenInterval);
+      this.refreshTokenInterval = null;
+    }
+  }
 
   private async request<Response extends {}, Request extends {}>(
     url: string,
     method: Method,
     payload?: Request
   ): Promise<Response> {
-    if (!this.token && !url.includes("token")) {
-      throw new Error(
-        "Performing a non-login Bidhive action with no access token."
-      );
-    }
+    // if (!this.token && !url.includes("token")) {
+    //   throw new Error(
+    //     "Performing a non-login Bidhive action with no access token."
+    //   );
+    // }
 
     const finalUrl = this.endpoint + url;
 
@@ -96,8 +105,16 @@ class BidhiveClient {
     this.token = token;
   }
 
+  public getClientId() {
+    return this.clientId;
+  }
+
   public setClientId(clientId: string) {
     this.clientId = clientId;
+  }
+
+  public getClientSecret() {
+    return this.clientSecret;
   }
 
   public setClientSecret(clientSecret: string) {
