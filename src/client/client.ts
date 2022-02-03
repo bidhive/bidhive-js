@@ -25,6 +25,7 @@ class BidhiveClient {
   constructor(private frontendUrl: string, private endpoint: string) {}
 
   public static init(options: { clientID: string; clientSecret: string }) {
+    console.log(`Initialising Bidhiveclient with options `, options);
     client.setClientId(options.clientID);
     client.setClientSecret(options.clientSecret);
   }
@@ -109,7 +110,7 @@ class BidhiveClient {
     return this.clientId;
   }
 
-  public setClientId(clientId: string) {
+  protected setClientId(clientId: string) {
     this.clientId = clientId;
   }
 
@@ -117,7 +118,7 @@ class BidhiveClient {
     return this.clientSecret;
   }
 
-  public setClientSecret(clientSecret: string) {
+  protected setClientSecret(clientSecret: string) {
     this.clientSecret = clientSecret;
   }
 
@@ -153,3 +154,5 @@ export const client = new BidhiveClient(
   "http://localhost:3000",
   "http://localhost:8000"
 );
+
+export const initClient = BidhiveClient.init;

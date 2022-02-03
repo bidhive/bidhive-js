@@ -68,7 +68,7 @@ export class AuthAPI {
     }
   };
 
-  static promptForLogin = async (clientId: string, clientSecret: string) => {
+  static promptForLogin = async () => {
     const email = prompt("Email:");
     if (!email) {
       throw new Error("Email must be entered");
@@ -82,12 +82,10 @@ export class AuthAPI {
     const result = await this.tokenAuth({
       email,
       password,
-      clientId,
-      clientSecret,
+      clientId: client.getClientId(),
+      clientSecret: client.getClientSecret(),
     });
     client.setToken(result);
-    client.setClientId(clientId);
-    client.setClientSecret(clientSecret);
     client.startTokenRefresh(this.refreshToken);
   };
 }

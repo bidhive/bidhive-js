@@ -1,2 +1,2 @@
-export { client } from "./client";
+export { initClient } from "./client";
 export * from "./api";
