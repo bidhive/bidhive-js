@@ -1,5 +1,6 @@
 import { Buffer } from "buffer";
-import { createPost, client, OAuth2Token } from "../../client";
+import { client, OAuth2Token } from "../../client";
+import { createLoginWindow } from "./create_login_window";
 
 interface TokenAuthPayload {
   email: string;
@@ -13,7 +14,7 @@ export class AuthAPI {
     const formData = new FormData();
     const headers = new Headers();
 
-    formData.append("grant_type", "password");
+    formData.append("grant_type", "authorization_code");
     formData.append("username", payload.email);
     formData.append("password", payload.password);
 
@@ -69,23 +70,29 @@ export class AuthAPI {
   };
 
   static promptForLogin = async () => {
-    const email = prompt("Email:");
-    if (!email) {
-      throw new Error("Email must be entered");
-    }
+    const loginResult = createLoginWindow(
+      client.getEndpoint(),
+      client.getClientId(),
+      client.getClientSecret()
+    );
+    console.debug(`Login result:`, loginResult);
+    //   const email = prompt("Email:");
+    //   if (!email) {
+    //     throw new Error("Email must be entered");
+    //   }
 
-    const password = prompt("Password:");
-    if (!password) {
-      throw new Error("Password must be entered");
-    }
+    //   const password = prompt("Password:");
+    //   if (!password) {
+    //     throw new Error("Password must be entered");
+    //   }
 
-    const result = await this.tokenAuth({
-      email,
-      password,
-      clientId: client.getClientId(),
-      clientSecret: client.getClientSecret(),
-    });
-    client.setToken(result);
-    client.startTokenRefresh(this.refreshToken);
+    //   const result = await this.tokenAuth({
+    //     email,
+    //     password,
+    //     clientId: client.getClientId(),
+    //     clientSecret: client.getClientSecret(),
+    //   });
+    //   client.setToken(result);
+    //   client.startTokenRefresh(this.refreshToken);
   };
 }
