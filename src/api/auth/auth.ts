@@ -71,9 +71,10 @@ export class AuthAPI {
 
   static promptForLogin = async () => {
     const loginResult = createLoginWindow(
-      client.getEndpoint(),
+      client.getFrontendUrl(),
       client.getClientId(),
-      client.getClientSecret()
+      client.getClientSecret(),
+      client.getRedirectUri()
     );
     console.debug(`Login result:`, loginResult);
     //   const email = prompt("Email:");

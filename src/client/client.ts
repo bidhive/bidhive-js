@@ -19,15 +19,21 @@ class BidhiveClient {
   private token: OAuth2Token | null = null;
   private clientId: string = "";
   private clientSecret: string = "";
+  private redirectUri: string = "";
 
   private refreshTokenInterval: NodeJS.Timer | null = null;
 
   constructor(private frontendUrl: string, private endpoint: string) {}
 
-  public static init(options: { clientID: string; clientSecret: string }) {
+  public static init(options: {
+    clientID: string;
+    clientSecret: string;
+    redirectUri: string;
+  }) {
     console.log(`Initialising Bidhive client with options `, options);
     client.setClientId(options.clientID);
     client.setClientSecret(options.clientSecret);
+    client.setRedirectUri(options.redirectUri);
   }
 
   public startTokenRefresh(
@@ -120,6 +126,14 @@ class BidhiveClient {
 
   protected setClientSecret(clientSecret: string) {
     this.clientSecret = clientSecret;
+  }
+
+  public getRedirectUri() {
+    return this.redirectUri;
+  }
+
+  protected setRedirectUri(redirectUri: string) {
+    this.redirectUri = redirectUri;
   }
 
   public async get<Response extends {}>(
