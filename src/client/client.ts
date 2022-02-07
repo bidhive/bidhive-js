@@ -1,3 +1,5 @@
+import { KEY_PREFIX } from "../api/key";
+
 type Method = "GET" | "POST";
 
 export interface OAuth2Token {
@@ -16,7 +18,10 @@ export type ClientCallback<Response> = (
 const TOKEN_REFRESH = 30 * 60 * 1000;
 
 class BidhiveClient {
-  private token: OAuth2Token | null = null;
+  private token: string | null = localStorage.getItem(`${KEY_PREFIX}token`);
+  private refreshToken: string | null = localStorage.getItem(
+    `${KEY_PREFIX}refresh_token`
+  );
   private clientId: string = "";
   private clientSecret: string = "";
   private redirectUri: string = "";
@@ -37,12 +42,18 @@ class BidhiveClient {
   }
 
   public startTokenRefresh(
-    refreshTokenFn: (payload: OAuth2Token) => Promise<OAuth2Token>
+    refreshTokenFn: (
+      token: string,
+      refreshToken: string
+    ) => Promise<OAuth2Token>
   ) {
     this.refreshTokenInterval = setInterval(async () => {
-      if (this.token) {
-        const newToken = await refreshTokenFn(this.token);
-        this.token = newToken;
+      if (this.token && this.refreshToken) {
+        const newToken = await refreshTokenFn(this.token, this.refreshToken);
+        this.token = newToken.access_token;
+        this.refreshToken = newToken.refresh_token;
+        localStorage.setItem(`${KEY_PREFIX}token`, this.token);
+        localStorage.setItem(`${KEY_PREFIX}refresh_token`, this.refreshToken);
       }
     }, TOKEN_REFRESH);
   }
@@ -70,10 +81,7 @@ class BidhiveClient {
     const headers = new Headers();
     headers.append("Content-Type", "application/json");
     if (this.token) {
-      headers.append(
-        "Authorization",
-        `${this.token.token_type} ${this.token.access_token}`
-      );
+      headers.append("Authorization", `Bearer ${this.token}`);
     }
 
     const response = await fetch(finalUrl, {
@@ -108,8 +116,12 @@ class BidhiveClient {
     return this.token;
   }
 
-  public setToken(token: OAuth2Token) {
+  public setToken(token: string) {
     this.token = token;
+  }
+
+  public setRefreshToken(refreshToken: string) {
+    this.refreshToken = refreshToken;
   }
 
   public getClientId() {

@@ -1,10 +1,11 @@
-import { Buffer } from "buffer";
+import { KEY_PREFIX } from "../key";
 import { client, OAuth2Token } from "../../client";
 import { createLoginWindow } from "./create_login_window";
 
 interface TokenAuthPayload {
-  email: string;
-  password: string;
+  grant_type: "authorization_code";
+  code: string;
+  redirectUri: string;
   clientId: string;
   clientSecret: string;
 }
@@ -14,17 +15,11 @@ export class AuthAPI {
     const formData = new FormData();
     const headers = new Headers();
 
-    formData.append("grant_type", "authorization_code");
-    formData.append("username", payload.email);
-    formData.append("password", payload.password);
-
-    headers.append(
-      "Authorization",
-      `Basic ${Buffer.from(
-        payload.clientId + ":" + payload.clientSecret,
-        "utf8"
-      ).toString("base64")}`
-    );
+    formData.append("grant_type", payload.grant_type);
+    formData.append("code", payload.code);
+    formData.append("redirect_uri", payload.redirectUri);
+    formData.append("client_id", payload.clientId);
+    formData.append("client_secret", payload.clientSecret);
 
     const response = await fetch(`${client.getEndpoint()}/oauth2/token/`, {
       credentials: "include",
@@ -39,16 +34,17 @@ export class AuthAPI {
       const result = (await response.json()) as OAuth2Token;
       return result;
     } catch (e) {
+      localStorage.removeItem(`${KEY_PREFIX}code`);
       throw new Error("Token authentication response was not valid JSON.");
     }
   };
 
-  private static refreshToken = async (payload: OAuth2Token) => {
+  private static refreshToken = async (refreshToken: string) => {
     const formData = new FormData();
     const headers = new Headers();
 
     formData.append("grant_type", "refresh_token");
-    formData.append("refresh_token", payload.refresh_token);
+    formData.append("refresh_token", refreshToken);
     formData.append("client_id", client.getClientId());
     formData.append("client_secret", client.getClientSecret());
 
@@ -69,31 +65,35 @@ export class AuthAPI {
     }
   };
 
+  // TODO(alec): Auto-set existing token and refresh token
+  static tryInitialLogin = async () => {
+    const cacheToken = localStorage.getItem(`${KEY_PREFIX}token`);
+    const cacheRefreshToken = localStorage.getItem(
+      `${KEY_PREFIX}refresh_token`
+    );
+    if (cacheToken && cacheRefreshToken) {
+      const token = await this.refreshToken(cacheRefreshToken);
+    }
+  };
+
   static promptForLogin = async () => {
-    const loginResult = createLoginWindow(
+    createLoginWindow(
       client.getFrontendUrl(),
       client.getClientId(),
       client.getClientSecret(),
-      client.getRedirectUri()
+      client.getRedirectUri(),
+      async (code) => {
+        const token = await this.tokenAuth({
+          grant_type: "authorization_code",
+          code,
+          redirectUri: client.getRedirectUri(),
+          clientId: client.getClientId(),
+          clientSecret: client.getClientSecret(),
+        });
+        client.setToken(token.access_token);
+        client.setRefreshToken(token.refresh_token);
+        client.startTokenRefresh(this.refreshToken);
+      }
     );
-    console.debug(`Login result:`, loginResult);
-    //   const email = prompt("Email:");
-    //   if (!email) {
-    //     throw new Error("Email must be entered");
-    //   }
-
-    //   const password = prompt("Password:");
-    //   if (!password) {
-    //     throw new Error("Password must be entered");
-    //   }
-
-    //   const result = await this.tokenAuth({
-    //     email,
-    //     password,
-    //     clientId: client.getClientId(),
-    //     clientSecret: client.getClientSecret(),
-    //   });
-    //   client.setToken(result);
-    //   client.startTokenRefresh(this.refreshToken);
   };
 }
