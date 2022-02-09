@@ -1,4 +1,5 @@
 export { AuthAPI } from "./auth";
-export { UserAPI, User } from "./user";
-export { BidAPI } from "./bid";
+export * from "./user";
+export * from "./bid";
+export * from "./customer";
 export type { PaginatedResponse } from "./pagination";
