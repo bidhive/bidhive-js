@@ -13,5 +13,6 @@ export interface User {
 }
 
 export class UserAPI {
-  static me = createGet<User>("/auth/me/");
+  static currentUser = createGet<User>("/public/user/current-user/");
+  static loadUsers = createGet<User[]>("/public/user/");
 }
