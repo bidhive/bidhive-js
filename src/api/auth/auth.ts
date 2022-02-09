@@ -8,6 +8,7 @@ interface TokenAuthPayload {
   redirectUri: string;
   clientId: string;
   clientSecret: string;
+  scope: string;
 }
 
 export class AuthAPI {
@@ -20,6 +21,7 @@ export class AuthAPI {
     formData.append("redirect_uri", payload.redirectUri);
     formData.append("client_id", payload.clientId);
     formData.append("client_secret", payload.clientSecret);
+    formData.append("scope", payload.scope);
 
     const response = await fetch(`${client.getEndpoint()}/oauth2/token/`, {
       credentials: "include",
@@ -82,13 +84,14 @@ export class AuthAPI {
       client.getClientId(),
       client.getClientSecret(),
       client.getRedirectUri(),
-      async (code) => {
+      async (code, scopes) => {
         const token = await this.tokenAuth({
           grant_type: "authorization_code",
           code,
           redirectUri: client.getRedirectUri(),
           clientId: client.getClientId(),
           clientSecret: client.getClientSecret(),
+          scope: scopes.join(" "),
         });
         client.setToken(token.access_token);
         client.setRefreshToken(token.refresh_token);

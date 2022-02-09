@@ -2,13 +2,16 @@ import { KEY_PREFIX } from "../key";
 
 interface AuthorisationCodeMessage {
   code: string;
+  scopes: string[];
 }
 
 function isAuthCodeMessage(message: any): message is AuthorisationCodeMessage {
   return (
     typeof message === "object" &&
     "code" in message &&
-    typeof message["code"] === "string"
+    typeof message.code === "string" &&
+    "scopes" in message &&
+    Array.isArray(message.scopes)
   );
 }
 
@@ -18,21 +21,22 @@ export function createLoginWindow(
   clientSecret: string,
   redirectUri: string,
   /** Callback for when the code is received */
-  callback?: (grantCode: string) => void
+  callback?: (grantCode: string, scopes: string[]) => void
 ) {
   function handleWindowMessage(
     message: MessageEvent<AuthorisationCodeMessage | any>
   ) {
     if (isAuthCodeMessage(message.data)) {
-      handleAuthCodeReceived(message.data.code);
+      handleAuthCodeReceived(message.data.code, message.data.scopes);
     }
   }
 
-  async function handleAuthCodeReceived(code: string) {
+  async function handleAuthCodeReceived(code: string, scopes: string[]) {
     localStorage.setItem(`${KEY_PREFIX}code`, code);
+    localStorage.setItem(`${KEY_PREFIX}scope`, scopes.join(" "));
     window.removeEventListener("message", handleWindowMessage);
     if (callback) {
-      callback(code);
+      callback(code, scopes);
     }
   }
 
