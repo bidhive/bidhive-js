@@ -64,29 +64,29 @@ interface DashboardQueryDates {
 
 export const DashboardAPI = {
   loadAggregations: createGet<DashboardAggregations, DashboardQueryDates>(
-    "/dashboard/aggregations/"
+    "/public/dashboard/aggregations/"
   ),
 
   loadBidsByStatus: createGet<BidsByStatusData, DashboardQueryDates>(
-    "/dashboard/bids-by-status/"
+    "/public/dashboard/bids-by-status/"
   ),
 
   loadBidNoBid: createGet<BidNoBidData, DashboardQueryDates>(
-    "/dashboard/bid-no-bid/"
+    "/public/dashboard/bid-no-bid/"
   ),
 
   loadBidRegistrationsByTime: createGet<
     BidRegistrationsByTimeData,
     DashboardQueryDates
-  >("/dashboard/bid-registrations-by-time/"),
+  >("/public/dashboard/bid-registrations-by-time/"),
 
   //   loadResourceAllocation: createGet<
   //     ResourceAllocationData,
 
   //     DashboardQueryDates
-  //   >("/dashboard/task-completion/"),
+  //   >("/public/dashboard/task-completion/"),
 
   //   loadTop10Customers: createGet<Top10CustomersData, {}, DashboardQueryDates>(
-  //     "/dashboard/top-10-customers/"
+  //     "/public/dashboard/top-10-customers/"
   //   ),
 };

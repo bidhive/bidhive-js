@@ -10,11 +10,18 @@ export interface QueryParams {
 
 type RequestUrl<URLParams = {}> = string | ((params: URLParams) => string);
 
+type GetFn<Response, URLParams extends QueryParams = {}> = (
+  queryParams?: URLParams,
+  callback?: ClientCallback<Response>
+) => Promise<Response>;
+
 export function createGet<Response, UrlParams extends QueryParams = {}>(
-  url: RequestUrl,
-  queryParams?: UrlParams
-): () => Promise<Response> {
-  return async (callback?: ClientCallback<Response>) => {
+  url: RequestUrl
+): GetFn<Response, UrlParams> {
+  return async (
+    queryParams?: UrlParams,
+    callback?: ClientCallback<Response>
+  ) => {
     let queryString = "";
     if (queryParams) {
       const urlSearchParams = new URLSearchParams();
@@ -55,16 +62,24 @@ export function createGet<Response, UrlParams extends QueryParams = {}>(
       queryString = urlSearchParams.toString().replace("%2C", ",");
     }
 
-    let finalUrl: string;
+    let resolvedUrl: string;
     if (typeof url === "string") {
-      finalUrl = url;
+      resolvedUrl = url;
     } else if (queryParams) {
-      finalUrl = url(queryParams);
+      resolvedUrl = url(queryParams);
     } else {
       throw new Error(
         "Tried to call createGet's url as a function but with no parameters"
       );
     }
+
+    const finalUrl = queryString
+      ? `${
+          resolvedUrl.endsWith("/")
+            ? resolvedUrl.slice(0, resolvedUrl.length - 1)
+            : resolvedUrl
+        }?${queryString}`
+      : resolvedUrl;
 
     return (await client.get(finalUrl, callback)) as Response;
   };
