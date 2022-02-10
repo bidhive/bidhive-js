@@ -10,11 +10,6 @@ export interface OAuth2Token {
   refresh_token: string;
 }
 
-export type ClientCallback<Response> = (
-  client: BidhiveClient,
-  response: Response
-) => void;
-
 const TOKEN_REFRESH = 30 * 60 * 1000;
 
 class BidhiveClient {
@@ -148,30 +143,20 @@ class BidhiveClient {
     this.redirectUri = redirectUri;
   }
 
-  public async get<Response extends {}>(
-    url: string,
-    callback?: ClientCallback<Response>
-  ): Promise<Response> {
+  public async get<Response extends {}>(url: string): Promise<Response> {
     const response = await this.request<Response, Request>(url, "GET");
-    if (callback) {
-      callback(this, response);
-    }
     return response;
   }
 
   public async post<Response extends {}, Request extends {}>(
     url: string,
-    payload: Request,
-    callback?: ClientCallback<Response>
+    payload: Request
   ): Promise<Response> {
     const response = await this.request<Response, Request>(
       url,
       "POST",
       payload
     );
-    if (callback) {
-      callback(this, response);
-    }
     return response;
   }
 }

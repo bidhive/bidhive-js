@@ -114,6 +114,9 @@ export interface Bid {
 }
 
 export const BidAPI = {
-  /** Loads all bids from the requesting user's company, which the user has permission to see */
+  /** Loads all bids from the requesting user's company, which the user has permission to see
+   *
+   * @returns An array of {@link Bid}s
+   */
   loadBids: createGet<PaginatedResponse<Bid>>("/public/bid/"),
 };

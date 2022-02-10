@@ -15,6 +15,9 @@ function isAuthCodeMessage(message: any): message is AuthorisationCodeMessage {
   );
 }
 
+/** Creates a login window, with which a user can sign into Bidhive
+ * and authorise an application on behalf of which to access their Bidhive account data
+ */
 export function createLoginWindow(
   endpoint: string,
   clientId: string,
@@ -48,9 +51,5 @@ export function createLoginWindow(
 
   if (popup) {
     window.addEventListener("message", handleWindowMessage);
-  } else {
-    return false;
   }
-
-  return true;
 }

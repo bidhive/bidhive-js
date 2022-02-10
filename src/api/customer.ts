@@ -9,6 +9,9 @@ export interface Customer {
 }
 
 export const CustomerAPI = {
-  /** Loads all customers registered under the requesting user's company */
+  /** Loads all customers registered under the requesting user's company
+   *
+   * @returns An array of {@link Customer}s
+   */
   loadCustomers: createGet<Customer[]>("/public/customer/"),
 };

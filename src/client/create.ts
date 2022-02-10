@@ -1,4 +1,4 @@
-import { client, ClientCallback } from "./client";
+import { client } from "./client";
 
 type QueryParamType =
   | (string | number | boolean | Array<string | number | boolean>)
@@ -11,17 +11,13 @@ export interface QueryParams {
 type RequestUrl<URLParams = {}> = string | ((params: URLParams) => string);
 
 type GetFn<Response, URLParams extends QueryParams = {}> = (
-  queryParams?: URLParams,
-  callback?: ClientCallback<Response>
+  queryParams?: URLParams
 ) => Promise<Response>;
 
 export function createGet<Response, UrlParams extends QueryParams = {}>(
   url: RequestUrl
 ): GetFn<Response, UrlParams> {
-  return async (
-    queryParams?: UrlParams,
-    callback?: ClientCallback<Response>
-  ) => {
+  return async (queryParams?: UrlParams) => {
     let queryString = "";
     if (queryParams) {
       const urlSearchParams = new URLSearchParams();
@@ -81,15 +77,14 @@ export function createGet<Response, UrlParams extends QueryParams = {}>(
         }?${queryString}`
       : resolvedUrl;
 
-    return (await client.get(finalUrl, callback)) as Response;
+    return (await client.get(finalUrl)) as Response;
   };
 }
 
 export function createPost<Response, Request>(
-  url: string,
-  callback?: ClientCallback<Response>
+  url: string
 ): (payload: Request) => Promise<Response> {
   return async (payload: Request) => {
-    return (await client.post(url, payload, callback)) as Response;
+    return (await client.post(url, payload)) as Response;
   };
 }
