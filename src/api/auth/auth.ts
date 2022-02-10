@@ -78,6 +78,7 @@ export class AuthAPI {
     }
   };
 
+  /** Opens a Bidhive login window, prompts for login and asks for application authorisation */
   static promptForLogin = async () => {
     createLoginWindow(
       client.getFrontendUrl(),
