@@ -1,5 +1,7 @@
 import { createGet } from "../client";
 import { BidState } from "./bid";
+import type { Customer } from "./customer";
+import type { User } from "./user";
 
 interface DashboardAggregations {
   total_won_value: number;
@@ -35,25 +37,25 @@ interface BidRegistrationsByTimeData {
   }[];
 }
 
-// interface Top10CustomersData {
-//   date_from: string;
-//   date_to: string;
-//   count: number;
-//   data: {
-//     customer: Customer;
-//     count: number;
-//   }[];
-// }
+interface Top10CustomersData {
+  date_from: string;
+  date_to: string;
+  count: number;
+  data: {
+    customer: Customer;
+    count: number;
+  }[];
+}
 
-// interface ResourceAllocationData {
-//   date_from: string;
-//   date_to: string;
-//   count: number;
-//   data: {
-//     user: User;
-//     total_tasks: number;
-//   }[];
-// }
+interface ResourceAllocationData {
+  date_from: string;
+  date_to: string;
+  count: number;
+  data: {
+    user: User;
+    total_tasks: number;
+  }[];
+}
 
 interface DashboardQueryDates {
   [key: string]: string | undefined;
@@ -80,13 +82,12 @@ export const DashboardAPI = {
     DashboardQueryDates
   >("/public/dashboard/bid-registrations-by-time/"),
 
-  //   loadResourceAllocation: createGet<
-  //     ResourceAllocationData,
+  loadResourceAllocation: createGet<
+    ResourceAllocationData,
+    DashboardQueryDates
+  >("/public/dashboard/task-completion/"),
 
-  //     DashboardQueryDates
-  //   >("/public/dashboard/task-completion/"),
-
-  //   loadTop10Customers: createGet<Top10CustomersData, {}, DashboardQueryDates>(
-  //     "/public/dashboard/top-10-customers/"
-  //   ),
+  loadTop10Customers: createGet<Top10CustomersData, DashboardQueryDates>(
+    "/public/dashboard/top-10-customers/"
+  ),
 };
