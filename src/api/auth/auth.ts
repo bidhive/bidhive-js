@@ -74,7 +74,7 @@ export class AuthAPI {
       `${KEY_PREFIX}refresh_token`
     );
     if (cacheToken && cacheRefreshToken) {
-      const token = await this.refreshToken(cacheRefreshToken);
+      await this.refreshToken(cacheRefreshToken);
     }
   };
 
