@@ -1,7 +1,6 @@
 import type { User } from "./user";
 import type { Customer } from "./customer";
 import { createGet } from "../client";
-import { PaginatedResponse } from "./pagination";
 
 export enum BidState {
   Registered = 10,
@@ -118,5 +117,5 @@ export const BidAPI = {
    *
    * @returns An array of {@link Bid}s
    */
-  loadBids: createGet<PaginatedResponse<Bid>>("/public/bid/"),
+  loadBids: createGet<Bid[]>("/public/bid/"),
 };
