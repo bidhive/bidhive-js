@@ -55,7 +55,8 @@ import { initClient, AuthAPI } from "@bidhive/bidhive";
 initClient({
     clientId: process.env.CLIENT_ID || "broken",
     clientSecret: process.env.CLIENT_SECRET || "broken",
-    redirectUri: process.env.REDIRECT_URI || "broken"
+    redirectUri: process.env.REDIRECT_URI || "broken",
+    zone: "ausnz" // "ausnz", "euuk" or "us" depending on where your Bidhive account is registered
 });
 
 AuthAPI.promptForLogin();

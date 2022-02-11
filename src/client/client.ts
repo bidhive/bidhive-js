@@ -12,25 +12,43 @@ export interface OAuth2Token {
 
 const TOKEN_REFRESH = 30 * 60 * 1000;
 
+/** Represents which area your Bidhive account resides in */
+type Zone = "ausnz" | "euuk" | "us";
+
+const FRONTEND_URLS: Record<Zone, string> = {
+  ausnz: "https://app.bidhive.com",
+  euuk: "https://app.bidhive.co.uk",
+  us: "https://app.bidhive.us",
+};
+
+const BACKEND_URLS: Record<Zone, string> = {
+  ausnz: "https://api.bidhive.com",
+  euuk: "https://api.bidhive.co.uk",
+  us: "https://api.bidhive.us",
+};
+
 class BidhiveClient {
   private token: string | null = localStorage.getItem(`${KEY_PREFIX}token`);
   private refreshToken: string | null = localStorage.getItem(
     `${KEY_PREFIX}refresh_token`
   );
+  private frontendUrl: string = "";
+  private endpoint: string = "";
   private clientId: string = "";
   private clientSecret: string = "";
   private redirectUri: string = "";
 
   private refreshTokenInterval: NodeJS.Timer | null = null;
 
-  constructor(private frontendUrl: string, private endpoint: string) {}
-
   public static init(options: {
     clientId: string;
     clientSecret: string;
     redirectUri: string;
+    zone: Zone;
   }) {
     console.log(`Initialising Bidhive client with options `, options);
+    client.setFrontendUrl(FRONTEND_URLS[options.zone]);
+    client.setEndpoint(BACKEND_URLS[options.zone]);
     client.setClientId(options.clientId);
     client.setClientSecret(options.clientSecret);
     client.setRedirectUri(options.redirectUri);
@@ -103,8 +121,16 @@ class BidhiveClient {
     return this.frontendUrl;
   }
 
+  protected setFrontendUrl(frontendUrl: string) {
+    this.frontendUrl = frontendUrl;
+  }
+
   public getEndpoint() {
     return this.endpoint;
+  }
+
+  protected setEndpoint(endpoint: string) {
+    this.endpoint = endpoint;
   }
 
   public getToken() {
@@ -161,9 +187,6 @@ class BidhiveClient {
   }
 }
 
-export const client = new BidhiveClient(
-  "http://localhost:3000",
-  "http://localhost:8000"
-);
+export const client = new BidhiveClient();
 
 export const initClient = BidhiveClient.init;
