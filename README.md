@@ -8,7 +8,7 @@
 
 ### Overview
 
-This library is built to work within an ES6 module environment. It can be used with plain JavaScript, with provided TypeScript definitions.
+This library is built to work within an ES6 module environment. It can be used with plain JavaScript, but also contains TypeScript definitions.
 
 ### Installation
 
@@ -24,7 +24,7 @@ yarn add @bidhive/bidhive
 
 The first thing you'll need to do is register an application from your Bidhive profile:
 
-![Empty applications](/assets/images/register_application_empty.png)
+![Empty applications](https://static.bidhive.com/documentation/register_application_empty.png)
 
 Click "Register Application"
 
