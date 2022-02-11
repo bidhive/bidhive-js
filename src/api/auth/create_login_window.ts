@@ -46,7 +46,7 @@ export function createLoginWindow(
   const popup = window.open(
     `${endpoint}/login-public?clientId=${clientId}&clientSecret=${clientSecret}&redirectUri=${redirectUri}`,
     "Bidhive Login",
-    "popup"
+    "popup, height=600, width=600"
   );
 
   if (popup) {
