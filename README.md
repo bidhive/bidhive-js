@@ -1,4 +1,7 @@
-#bidhive-js
+
+<p align="center" width="100%">
+  <img src="https://static.bidhive.com/bidhive-icon.png" alt="Bidhive"></img>
+</p>
 
 <h1 align="center" width="100%">Bidhive JS</h1>
 
