@@ -26,12 +26,12 @@ class BidhiveClient {
   constructor(private frontendUrl: string, private endpoint: string) {}
 
   public static init(options: {
-    clientID: string;
+    clientId: string;
     clientSecret: string;
     redirectUri: string;
   }) {
     console.log(`Initialising Bidhive client with options `, options);
-    client.setClientId(options.clientID);
+    client.setClientId(options.clientId);
     client.setClientSecret(options.clientSecret);
     client.setRedirectUri(options.redirectUri);
   }
