@@ -37,7 +37,7 @@ Which should result in this:
 
 Once registered, take the client ID, client secret and redirect URI values and embed them somewhere in your own application (environment variables, pulled via API, hardcoded etc.).
 
-**Example**
+**Environment Variable Example**
 
 ```sh
 export CLIENT_ID=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
