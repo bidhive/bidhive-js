@@ -2,9 +2,9 @@
 
 <h1 align="center" width="100%">Bidhive JS</h1>
 
-<p align="center" width="100%">**A JavaScript library to query Bidhive from your own platform**</p>
+<p align="center" width="100%">A JavaScript library to query Bidhive from your own platform</p>
 
-<p align="center" width="100%">NPM link can be found [here](https://www.npmjs.com/package/@bidhive/bidhive)</p>
+<p align="center" width="100%">NPM link can be found here: https://www.npmjs.com/package/@bidhive/bidhive</p>
 
 ### Overview
 
