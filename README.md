@@ -24,11 +24,16 @@ yarn add @bidhive/bidhive
 
 The first thing you'll need to do is register an application from your Bidhive profile:
 
-(Developer settings picture)
+![Empty applications](/assets/images/register_application_empty.png)
 
 Click "Register Application"
 
-(Application registration form picture)
+![Application registration](/assets/images/register_application_modal.png)
+
+
+Which should result in this:
+
+![My Application](/assets/images/register_application_my_application.png)
 
 Once registered, take the client ID, client secret and redirect URI values and embed them somewhere in your own application (environment variables, pulled via API, hardcoded etc.).
 
@@ -55,11 +60,11 @@ AuthAPI.promptForLogin();
 
 This will open a window which prompts you to login to Bidhive, if you aren't already logged in.
 
-(Login window picture))
+![Login window](/assets/images/register_application_public_login.png)
 
 Assuming the values you passed to ```initClient``` were correct. You will then be asked to authorise your application with the permissions selected when registering.
 
-(Application authorisation page)
+![Application authorisation](/assets/images/register_application_authorisation.png)
 
 After clicking "Allow", you're all set to start making requests on behalf of your Bidhive user!
 
@@ -85,11 +90,4 @@ async function loadBidhiveData() {
 loadBidhiveData();
 ```
 
-Key points:
-
-- Application registration
-- Setting application environment variables
-- Logging into Bidhive via the public login portal
-- Authorising your application
-- Initialising API client
-- Making API calls
+Have fun!
