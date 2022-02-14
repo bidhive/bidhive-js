@@ -78,7 +78,7 @@ export const DashboardAPI = {
    * @returns An instance of {@link DashboardAggregations}
    */
   loadAggregations: createGet<DashboardAggregations, DashboardQueryDates>(
-    "/public/dashboard/aggregations/"
+    "/v2/dashboard/aggregations/"
   ),
 
   /** Loads bids the requesting user has access to, sorted into their related bid status
@@ -87,7 +87,7 @@ export const DashboardAPI = {
    * @returns An instance of {@link BidsByStatusData}
    */
   loadBidsByStatus: createGet<BidsByStatusData, DashboardQueryDates>(
-    "/public/dashboard/bids-by-status/"
+    "/v2/dashboard/bids-by-status/"
   ),
 
   /** Loads bids with a decision result as "bid", vs those with "no_bid"
@@ -96,7 +96,7 @@ export const DashboardAPI = {
    * @returns An instance of {@link BidNoBidData}
    */
   loadBidNoBid: createGet<BidNoBidData, DashboardQueryDates>(
-    "/public/dashboard/bid-no-bid/"
+    "/v2/dashboard/bid-no-bid/"
   ),
 
   /** Loads how many bids were registered on a day-by-day basis
@@ -107,7 +107,7 @@ export const DashboardAPI = {
   loadBidRegistrationsByTime: createGet<
     BidRegistrationsByTimeData,
     DashboardQueryDates
-  >("/public/dashboard/bid-registrations-by-time/"),
+  >("/v2/dashboard/bid-registrations-by-time/"),
 
   /** Loads how many users have been allocated to tasks within the given timeframe
    *
@@ -117,7 +117,7 @@ export const DashboardAPI = {
   loadResourceAllocation: createGet<
     ResourceAllocationData,
     DashboardQueryDates
-  >("/public/dashboard/task-completion/"),
+  >("/v2/dashboard/task-completion/"),
 
   /** Loads the top 10 customers, ordered by the amount of bids they're assigned to
    *
@@ -125,6 +125,6 @@ export const DashboardAPI = {
    * @returns An instance of {@link Top10CustomersData}
    */
   loadTop10Customers: createGet<Top10CustomersData, DashboardQueryDates>(
-    "/public/dashboard/top-10-customers/"
+    "/v2/dashboard/top-10-customers/"
   ),
 };

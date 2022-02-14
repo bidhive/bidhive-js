@@ -47,8 +47,10 @@ class BidhiveClient {
     zone: Zone;
   }) {
     console.log(`Initialising Bidhive client with options `, options);
-    client.setFrontendUrl(FRONTEND_URLS[options.zone]);
-    client.setEndpoint(BACKEND_URLS[options.zone]);
+    client.setFrontendUrl(
+      "http://localhost:3000" || FRONTEND_URLS[options.zone]
+    );
+    client.setEndpoint("http://localhost:8000" || BACKEND_URLS[options.zone]);
     client.setClientId(options.clientId);
     client.setClientSecret(options.clientSecret);
     client.setRedirectUri(options.redirectUri);

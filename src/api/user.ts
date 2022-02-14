@@ -26,10 +26,10 @@ export const UserAPI = {
    *
    * @returns An instance of {@link User} for the requesting user
    */
-  currentUser: createGet<User>("/public/user/current-user/"),
+  currentUser: createGet<User>("/v2/user/current-user/"),
   /** Loads all active users within the requesting user's company
    *
    * @returns An array of active {@link User}s in the requesting user's company
    */
-  loadUsers: createGet<User[]>("/public/user/"),
+  loadUsers: createGet<User[]>("/v2/user/"),
 };

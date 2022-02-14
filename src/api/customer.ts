@@ -13,5 +13,5 @@ export const CustomerAPI = {
    *
    * @returns An array of {@link Customer}s
    */
-  loadCustomers: createGet<Customer[]>("/public/customer/"),
+  loadCustomers: createGet<Customer[]>("/v2/customer/"),
 };

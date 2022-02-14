@@ -117,5 +117,5 @@ export const BidAPI = {
    *
    * @returns An array of {@link Bid}s
    */
-  loadBids: createGet<Bid[]>("/public/bid/"),
+  loadBids: createGet<Bid[]>("/v2/bid/"),
 };
