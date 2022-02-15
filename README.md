@@ -50,9 +50,9 @@ export REDIRECT_URI=https://my-site.com/redirect
 
 ```ts
 /* At some entry point in your program */
-import { initClient, AuthAPI } from "@bidhive/bidhive";
+import { AuthAPI } from "@bidhive/bidhive";
 
-initClient({
+AuthAPI.initClient({
     clientId: process.env.CLIENT_ID || "broken",
     clientSecret: process.env.CLIENT_SECRET || "broken",
     redirectUri: process.env.REDIRECT_URI || "broken",
