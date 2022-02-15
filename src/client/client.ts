@@ -15,6 +15,13 @@ const TOKEN_REFRESH = 30 * 60 * 1000;
 /** Represents which area your Bidhive account resides in */
 type Zone = "ausnz" | "euuk" | "us";
 
+export interface ClientInitOptions {
+  clientId: string;
+  clientSecret: string;
+  redirectUri: string;
+  zone: Zone;
+}
+
 const FRONTEND_URLS: Record<Zone, string> = {
   ausnz: "https://app.bidhive.com",
   euuk: "https://app.bidhive.co.uk",
@@ -28,10 +35,8 @@ const BACKEND_URLS: Record<Zone, string> = {
 };
 
 class BidhiveClient {
-  private token: string | null = localStorage.getItem(`${KEY_PREFIX}token`);
-  private refreshToken: string | null = localStorage.getItem(
-    `${KEY_PREFIX}refresh_token`
-  );
+  private token: string | null = null;
+  private refreshToken: string | null = null;
   private frontendUrl: string = "";
   private endpoint: string = "";
   private clientId: string = "";
@@ -40,18 +45,13 @@ class BidhiveClient {
 
   private refreshTokenInterval: NodeJS.Timer | null = null;
 
-  public static init(options: {
-    clientId: string;
-    clientSecret: string;
-    redirectUri: string;
-    zone: Zone;
-  }) {
+  public init(options: ClientInitOptions) {
     console.log(`Initialising Bidhive client with options `, options);
-    client.setFrontendUrl(FRONTEND_URLS[options.zone]);
-    client.setEndpoint(BACKEND_URLS[options.zone]);
-    client.setClientId(options.clientId);
-    client.setClientSecret(options.clientSecret);
-    client.setRedirectUri(options.redirectUri);
+    this.setFrontendUrl(FRONTEND_URLS[options.zone]);
+    this.setEndpoint(BACKEND_URLS[options.zone]);
+    this.setClientId(options.clientId);
+    this.setClientSecret(options.clientSecret);
+    this.setRedirectUri(options.redirectUri);
   }
 
   public startTokenRefresh(
@@ -188,5 +188,3 @@ class BidhiveClient {
 }
 
 export const client = new BidhiveClient();
-
-export const initClient = BidhiveClient.init;

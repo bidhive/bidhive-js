@@ -1,2 +1,2 @@
-export { client, initClient, OAuth2Token } from "./client";
+export { client, OAuth2Token, ClientInitOptions } from "./client";
 export { createGet, createPost } from "./create";

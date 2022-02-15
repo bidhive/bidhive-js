@@ -1,5 +1,5 @@
 import { KEY_PREFIX } from "../key";
-import { client, OAuth2Token } from "../../client";
+import { client, OAuth2Token, ClientInitOptions } from "../../client";
 import { createLoginWindow } from "./create_login_window";
 
 interface TokenAuthPayload {
@@ -9,6 +9,18 @@ interface TokenAuthPayload {
   clientId: string;
   clientSecret: string;
   scope: string;
+}
+
+function cacheTokens(token: OAuth2Token) {
+  localStorage.setItem(`${KEY_PREFIX}token`, token.access_token);
+  localStorage.setItem(`${KEY_PREFIX}refresh_token`, token.refresh_token);
+}
+
+function getCachedTokens(): [string | null, string | null] {
+  return [
+    localStorage.getItem(`${KEY_PREFIX}token`),
+    localStorage.getItem(`${KEY_PREFIX}refresh_token`),
+  ];
 }
 
 export class AuthAPI {
@@ -23,7 +35,7 @@ export class AuthAPI {
     formData.append("client_secret", payload.clientSecret);
     formData.append("scope", payload.scope);
 
-    const response = await fetch(`${client.getEndpoint()}/oauth2/token/`, {
+    const response = await fetch(`${client.getEndpoint()}/v2/oauth2/token/`, {
       credentials: "include",
       method: "POST",
       headers,
@@ -34,6 +46,8 @@ export class AuthAPI {
 
     try {
       const result = (await response.json()) as OAuth2Token;
+      // Cache token
+      cacheTokens(result);
       return result;
     } catch (e) {
       localStorage.removeItem(`${KEY_PREFIX}code`);
@@ -50,7 +64,7 @@ export class AuthAPI {
     formData.append("client_id", client.getClientId());
     formData.append("client_secret", client.getClientSecret());
 
-    const response = await fetch(`${client.getEndpoint()}/oauth2/token/`, {
+    const response = await fetch(`${client.getEndpoint()}/v2/oauth2/token/`, {
       credentials: "include",
       method: "POST",
       headers,
@@ -61,20 +75,10 @@ export class AuthAPI {
 
     try {
       const result = (await response.json()) as OAuth2Token;
+      cacheTokens(result);
       return result;
     } catch (e) {
       throw new Error("Token authentication response was not valid JSON.");
-    }
-  };
-
-  // TODO(alec): Auto-set existing token and refresh token
-  static tryInitialLogin = async () => {
-    const cacheToken = localStorage.getItem(`${KEY_PREFIX}token`);
-    const cacheRefreshToken = localStorage.getItem(
-      `${KEY_PREFIX}refresh_token`
-    );
-    if (cacheToken && cacheRefreshToken) {
-      await this.refreshToken(cacheRefreshToken);
     }
   };
 
@@ -100,4 +104,27 @@ export class AuthAPI {
       }
     );
   };
+
+  public static initClient(options: ClientInitOptions) {
+    client.init(options);
+    const self = this;
+
+    async function tryInitialLogin() {
+      const [cacheToken, cacheRefreshToken] = getCachedTokens();
+
+      if (cacheToken && cacheRefreshToken) {
+        try {
+          const token = await self.refreshToken(cacheRefreshToken);
+          client.setToken(token.access_token);
+          client.setRefreshToken(token.refresh_token);
+          client.startTokenRefresh(self.refreshToken);
+        } catch (e) {
+          // Initial login failed
+          console.log("Initial Bidhive client login failed.");
+        }
+      }
+    }
+
+    tryInitialLogin();
+  }
 }
