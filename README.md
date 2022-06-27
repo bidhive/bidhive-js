@@ -27,16 +27,16 @@ yarn add @bidhive/bidhive
 
 The first thing you'll need to do is register an application from your Bidhive profile:
 
-![Empty applications](/.github/images/register_application_empty.png)
+![Empty applications](https://static.bidhive.com/api/register_application_empty.png)
 
 Click "Register Application"
 
-![Application registration](/.github/images/register_application_modal.png)
+![Application registration](https://static.bidhive.com/api/register_application_modal.png)
 
 
 Which should result in this:
 
-![My Application](/.github/images/register_application_my_application.png)
+![My Application](https://static.bidhive.com/api/register_application_my_application.png)
 
 Once registered, take the client ID, client secret and redirect URI values and embed them somewhere in your own application (environment variables, pulled via API, hardcoded etc.).
 
@@ -64,11 +64,11 @@ AuthAPI.promptForLogin();
 
 This will open a window which prompts you to login to Bidhive, if you aren't already logged in.
 
-![Login window](/.github/images/register_application_public_login.png)
+![Login window](https://static.bidhive.com/api/register_application_public_login.png)
 
 Assuming the values you passed to ```initClient``` were correct. You will then be asked to authorise your application with the permissions selected when registering.
 
-![Application authorisation](/.github/images/register_application_authorisation.png)
+![Application authorisation](https://static.bidhive.com/api/register_application_authorisation.png)
 
 After clicking "Allow", you're all set to start making requests on behalf of your Bidhive user!
 
