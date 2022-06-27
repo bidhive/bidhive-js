@@ -9,6 +9,8 @@
 
 <p align="center" width="100%">NPM link can be found here: https://www.npmjs.com/package/@bidhive/bidhive</p>
 
+<p align="center" width="100%">GitHub link can be found here: https://github.com/bidhive/bidhive-js</p>
+
 ### Overview
 
 This library is built to work within an ES6 module environment. It can be used with plain JavaScript, but also contains TypeScript definitions.
